@@ -1,101 +1,32 @@
 #include "hash.h" 
-/*
-void create_hash(int number){
-	int i;
-	for (i = 0; i < num_vertices; i ++) {
-		free(hashArray[i]);
-	}
-    free(hashArray);
-    num_vertices = number;
-    hashArray = (struct DataItem**)calloc(number, sizeof(struct DataItem *));
-}
-*/
 
 struct my_struct * vnormals = NULL;
 
 double* search(double key0, double key1, double key2) {
-    int hashIndex = 0;  
-	
-    //move in array until empty 
-    while(hashArray[hashIndex]) {
-        if(hashArray[hashIndex]->key[0] == key0 && 
-		   hashArray[hashIndex]->key[1] == key1 &&
-		   hashArray[hashIndex]->key[2] == key2) {
-            return hashArray[hashIndex]->vertex_normal;
-        }
-        
-        //go to next cell
-        hashIndex++;
-    }        
-	
-    return NULL;        
+  double * search_key = malloc(sizeof(double)*3);
+  search_key[0] = key0;
+  search_key[1] = key1;
+  search_key[2] = key2;
+
+  struct my_struct * result;
+  HASH_FIND(hh, vnormals, search_key, sizeof(double)*3, result);
+  return result->normals;
 }
 
-void insert(double p1, double p2, double p3) {
+void insert(double p0, double p1, double p2, double n0, double n1, double n2){
   struct my_struct * point;
   point = malloc(sizeof(struct my_struct));
 
-  point->ar = malloc(sizeof(double)*3);
-  point->id = (int)point.ar;
-  HASH_ADD_INT(vnormals, id, point);
+  point->key = malloc(sizeof(double)*3);
+  point->key[0]=p0;
+  point->key[1]=p1;
+  point->key[2]=p2;
+
+  point->normals = malloc(sizeof(double)*3);
+  point->normals[0]=n0;
+  point->normals[1]=n1;
+  point->normals[2]=n2;
+
+  HASH_ADD_KEYPTR(hh, vnormals, point->key,
+		  sizeof(double)*3, point);
 }
-
-  
-  
-  
-  /*  int i, j;
-    for (i = 0; i < num_vertices; i++){
-        if (!hashArray[i]){//empty spot (1st one), put this in
-            struct DataItem *item = (struct DataItem *)malloc(sizeof(struct DataItem));
-            item->key[0] = key0;
-            item->key[1] = key1;
-            item->key[2] = key2;
-            item->vertex_normal[0] = data0;
-			item->vertex_normal[1] = data1;
-			item->vertex_normal[2] = data2;
-            hashArray[i] = item;
-            return;
-        }
-        else{
-            if (hashArray[i]->key[0] == key0 && hashArray[i]->key[1] == key1 && hashArray[i]->key[2] == key2) {
-                hashArray[i]->vertex_normal[0] += data0;
-                hashArray[i]->vertex_normal[1] += data1;
-                hashArray[i]->vertex_normal[2] += data2;
-                // printf("repeat offender; keys are %f %f %f\n", key0, key1, key2);
-                // printf("repeat offender; keys already here are %f %f %f\n\n", hashArray[i]->key[0], hashArray[i]->key[1], hashArray[i]->key[2]);
-                return;
-            }
-        }
-    }
-  */
-}
-
-void print_hash() {
-    int i;
-    for (i = 0; i<num_vertices; i++){
-        if (hashArray[i]){
-            printf("key:\n(%0.2f, %0.2f, %0.2f)\n", hashArray[i]->key[0], hashArray[i]->key[1], hashArray[i]->key[2]);
-            printf("data:\n");
-			printf("(%0.2f, %0.2f, %0.2f)\n", hashArray[i]->vertex_normal[0], hashArray[i]->vertex_normal[1], hashArray[i]->vertex_normal[2]);
-            printf("\n\n");
-        }
-        else{
-            printf(" ~~ ");
-        }
-    }
-    printf("\ni is %d\n", i);
-}
-
-// int main() {
-
-//     create_hash(4);
-//     insert(24, 25, 26, 2, 3, 4);
-//     insert(24, 25, 26, 22, 33, 44);
-
-//     insert(4, 5, 6, 24, 34, 44);
-//     insert(4, 5, 6, 0, 2, 0);
-//     insert(4, 5, 6, 64, 64, 64);
-
-//     printf("searching from (24, 25, 26): (%f, %f, %f)\n", search(24, 25, 26)[0], search(24, 25, 26)[1], search(24, 25, 26)[2]);
-//     print_hash();
-// }

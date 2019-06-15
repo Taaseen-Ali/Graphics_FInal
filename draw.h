@@ -1,4 +1,3 @@
-
 #ifndef DRAW_H
 #define DRAW_H
 
@@ -6,19 +5,30 @@
 #include "ml6.h"
 #include "symtab.h"
 
-void draw_scanline(int x0, double z0, int x1, double z1, int y, screen s, zbuffer zb, color c);
-void scanline_convert( struct matrix *points, int i, screen s, zbuffer zb, color il );
+void scanline_convert(struct matrix *points, int i, screen s, zbuffer zb, color c );
+void shade_gouraud(struct matrix *points, int i, screen s, zbuffer zb,
+                   double *view, double light[2][3], color ambient,
+                   struct constants *reflect);
+void shade_phong(struct matrix *points, int i, screen s, zbuffer zb,
+                   double *view, double light[2][3], color ambient,
+                   struct constants *reflect);
 
 //polygon organization
-void add_polygons( struct matrix * polys,
+void add_polygons( struct matrix * points,
                    double x0, double y0, double z0,
                    double x1, double y1, double z1,
                    double x2, double y2, double z2);
-void draw_polygons( struct matrix * polys, screen s, zbuffer zb,
+void draw_polygons( struct matrix * polygons, screen s, zbuffer zb,
                     double *view, double light[2][3], color ambient,
                     struct constants *reflect);
+void draw_gouraud(struct matrix *polygons, screen s, zbuffer zb,
+                   double *view, double light[2][3], color ambient,
+                   struct constants *reflect);
+void draw_phong(struct matrix *polygons, screen s, zbuffer zb,
+                   double *view, double light[2][3], color ambient,
+                   struct constants *reflect);
 
-//advanced shapes
+
 //3d shapes
 void add_box( struct matrix * edges,
               double x, double y, double z,
@@ -34,11 +44,11 @@ void add_torus( struct matrix * edges,
 struct matrix * generate_torus( double cx, double cy, double cz,
                                 double r1, double r2, int step );
 
-//2D Curves
-void add_circle( struct matrix * points,
+//advanced shapes
+void add_circle( struct matrix * edges,
                  double cx, double cy, double cz,
                  double r, int step );
-void add_curve( struct matrix *points,
+void add_curve( struct matrix *edges,
                 double x0, double y0,
                 double x1, double y1,
                 double x2, double y2,
@@ -54,4 +64,11 @@ void draw_line(int x0, int y0, double z0,
                int x1, int y1, double z1,
                screen s, zbuffer zb, color c);
 
+
+void draw_line_with_color(int x0, int y0, double z0, int x1, int y1, double z1, screen s, zbuffer zb, color c1, color c2);
+void draw_line_with_normal(int x0, int y0, double z0,
+                           int x1, int y1, double z1,
+                           screen s, zbuffer zb, double normal0[3], double normal1[3],
+                           double *view, double light[2][3], color ambient,
+                           struct constants *reflect);
 #endif

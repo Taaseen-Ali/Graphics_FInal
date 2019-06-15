@@ -42,7 +42,7 @@ gmath.o: gmath.c gmath.h matrix.h
 stack.o: stack.c stack.h matrix.h
 	$(CC) $(CFLAGS) -c stack.c
 
-hash.o: hash.h
+hash.o: hash.h hash.h
 	$(CC) $(CFLAGS) -c hash.c
 
 
