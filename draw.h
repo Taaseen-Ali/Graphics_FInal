@@ -6,10 +6,10 @@
 #include "symtab.h"
 
 void scanline_convert(struct matrix *points, int i, screen s, zbuffer zb, color c );
-void shade_gouraud(struct matrix *points, int i, screen s, zbuffer zb,
+void interpolate_gouraud(struct matrix *points, int i, screen s, zbuffer zb,
                    double *view, double light[2][3], color ambient,
                    struct constants *reflect);
-void shade_phong(struct matrix *points, int i, screen s, zbuffer zb,
+void interpolate_phong(struct matrix *points, int i, screen s, zbuffer zb,
                    double *view, double light[2][3], color ambient,
                    struct constants *reflect);
 
@@ -65,8 +65,8 @@ void draw_line(int x0, int y0, double z0,
                screen s, zbuffer zb, color c);
 
 
-void draw_line_with_color(int x0, int y0, double z0, int x1, int y1, double z1, screen s, zbuffer zb, color c1, color c2);
-void draw_line_with_normal(int x0, int y0, double z0,
+void draw_line_gouraud(int x0, int y0, double z0, int x1, int y1, double z1, screen s, zbuffer zb, color c1, color c2);
+void draw_line_phong(int x0, int y0, double z0,
                            int x1, int y1, double z1,
                            screen s, zbuffer zb, double normal0[3], double normal1[3],
                            double *view, double light[2][3], color ambient,
